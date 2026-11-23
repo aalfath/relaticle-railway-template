@@ -46,7 +46,7 @@ The full list is in upstream's [self-hosting guide](https://github.com/relaticle
 
 ## Resources
 
-The whole app service idles at about 230 MB and fits Railway's 0.5 GB per-service limit (tested with 0.5 GB / 1 vCPU). The defaults in the `Dockerfile` keep it there: 4 PHP-FPM children, 64 MB opcache, no CLI opcache, one queue worker. On a bigger plan you can raise `PHP_FPM_PM_MAX_CHILDREN`. If a process inside dies, s6 restarts it. If the first-boot setup fails (for example, Postgres can't be reached for 3 minutes), the container exits non-zero and Railway restarts it.
+The whole app service idles at about 230 MB and fits Railway's 0.5 GB per-service limit (tested with 0.5 GB / 1 vCPU). The defaults in the `Dockerfile` keep it there: 3 PHP-FPM children (on demand, freed after 20 s idle), 64 MB opcache, no CLI opcache, one queue worker. On a bigger plan you can raise `PHP_FPM_PM_MAX_CHILDREN`. If a process inside dies, s6 restarts it. If the first-boot setup fails (for example, Postgres can't be reached for 3 minutes), the container exits non-zero and Railway restarts it.
 
 ## Updates
 

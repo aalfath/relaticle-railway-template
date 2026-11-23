@@ -10,6 +10,8 @@ USER root
 # Reverb runs inside this container on 127.0.0.1:8081 (upstream proxies to a
 # separate "reverb" container through Docker's DNS, which Railway doesn't have).
 COPY railway/reverb.conf /etc/nginx/server-opts.d/reverb.conf
+# PHP-FPM pool limits that actually apply (see the file).
+COPY railway/zzzz-railway-pool.conf /usr/local/etc/php-fpm.d/zzzz-railway-pool.conf
 # First-boot work: volume, Passport keys, wait for Postgres/Redis, migrations,
 # caches and the admin account. A failure exits non-zero so Railway restarts it.
 COPY railway/60-railway-init.sh /etc/entrypoint.d/60-railway-init.sh
@@ -20,7 +22,7 @@ COPY railway/check-services.php railway/ensure-admin.php /usr/local/share/railwa
 COPY railway/railway-entrypoint.sh /usr/local/bin/railway-entrypoint
 
 RUN chmod 755 /etc/entrypoint.d/60-railway-init.sh /usr/local/bin/railway-entrypoint \
- && chmod 644 /usr/local/share/railway/*.php \
+ && chmod 644 /usr/local/share/railway/*.php /usr/local/etc/php-fpm.d/zzzz-railway-pool.conf \
  && for s in relaticle-queue relaticle-scheduler relaticle-reverb; do \
       chmod 755 /etc/s6-overlay/s6-rc.d/$s/run; \
       touch /etc/s6-overlay/user-bundles.d/user/contents.d/$s; \
@@ -35,7 +37,7 @@ RUN chmod 755 /etc/entrypoint.d/60-railway-init.sh /usr/local/bin/railway-entryp
 # them with a service variable.
 ENV AUTORUN_ENABLED=false \
     NGINX_HTTP_PORT=8080 \
-    PHP_FPM_PM_MAX_CHILDREN=4 \
+    PHP_FPM_PM_MAX_CHILDREN=3 \
     PHP_OPCACHE_MEMORY_CONSUMPTION=64 \
     PHP_OPCACHE_ENABLE_CLI=0 \
     APP_ENV=production \
