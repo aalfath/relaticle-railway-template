@@ -18,8 +18,9 @@ Upstream's Compose file runs Horizon, the scheduler and Reverb as separate conta
 
 1. Wait until the `Relaticle` service shows **Active**. The first boot runs the database migrations and takes about a minute.
 2. Open the service's public URL. Sign in with the `ADMIN_EMAIL` you entered and the generated `ADMIN_PASSWORD` (open the `Relaticle` service's **Variables** tab to see it). This account is a verified CRM user and the system administrator at `/sysadmin`.
-3. Change the password under your profile if you like. The template only uses `ADMIN_PASSWORD` to create the account the first time.
-4. To use Rela, the AI assistant, add `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` (or `OLLAMA_BASE_URL` + `OLLAMA_MODEL`) to the `Relaticle` service. The CRM works without one.
+3. On first sign-in Relaticle asks for your name and a workspace name, then runs a short setup wizard (use case, invite your team). Finish it or click **Get started** to reach the CRM.
+4. Change the password under your profile if you like. The template only uses `ADMIN_PASSWORD` to create the account the first time.
+5. To use Rela, the AI assistant, add `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` (or `OLLAMA_BASE_URL` + `OLLAMA_MODEL`) to the `Relaticle` service. The CRM works without one.
 
 **Sign-up is open.** Like upstream's self-hosted build, anyone who can reach the URL can create an account and their own workspace. New accounts must verify their email address, and the template sends mail to the log until you set up SMTP, so strangers can't get in by default. Invite your team from the workspace settings.
 
