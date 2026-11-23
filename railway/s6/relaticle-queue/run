@@ -1,0 +1,8 @@
+#!/command/with-contenv sh
+# One queue worker for every queue (upstream's Horizon profile starts 12+ workers,
+# about 2 GB). Chat first, then default, mail and imports. --timeout stays under
+# the redis connection's retry_after (360 s); chat turns stop themselves at 120 s.
+cd /var/www/html
+exec s6-setuidgid www-data php artisan queue:work redis \
+  --queue=chat,default,emails-priority,imports,emails-sync,emails-import,emails-bulk \
+  --sleep=3 --tries=3 --timeout=330 --memory=160 --max-time=3600 --no-interaction

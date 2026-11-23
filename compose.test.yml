@@ -1,0 +1,30 @@
+# Local test only (Daytona). Mirrors the Railway template's variables.
+services:
+  app:
+    build: .
+    environment:
+      PORT: "8080"
+      APP_KEY: "abcdefghijklmnopqrstuvwxyzABCDEF"
+      APP_URL: "http://localhost:8080"
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_DATABASE: railway
+      DB_USERNAME: postgres
+      DB_PASSWORD: testpw
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: redispw
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_PASSWORD: "Test-Passw0rd-123"
+    ports: ["8080:8080"]
+    volumes: ["storage:/var/www/html/storage/app"]
+    mem_limit: 512m
+    cpus: 1
+  postgres:
+    image: postgres:17-alpine
+    environment: {POSTGRES_DB: railway, POSTGRES_USER: postgres, POSTGRES_PASSWORD: testpw}
+    volumes: ["pg:/var/lib/postgresql/data"]
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass redispw --appendonly yes
+volumes: {storage: {}, pg: {}}

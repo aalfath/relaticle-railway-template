@@ -1,0 +1,9 @@
+#!/command/with-contenv sh
+# Cron-style scheduler: run schedule:run at the top of every minute instead of
+# keeping a resident schedule:work process (saves about 130 MB on small plans).
+cd /var/www/html
+while :; do
+  s=$(date +%S); s=${s#0}
+  sleep $((60 - s))
+  s6-setuidgid www-data php artisan schedule:run --no-interaction >/dev/null || echo "scheduler: schedule:run exited $?" >&2
+done
